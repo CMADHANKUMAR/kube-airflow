@@ -15,6 +15,7 @@ spec:
         app: {{ template "airflow.name" . }}-flower
         release: {{ .Release.Name }}
     spec:
+      serviceAccountName: spark
       restartPolicy: Always
       containers:
         - name: {{ .Chart.Name }}-flower

@@ -6,7 +6,7 @@ airflow:
   # Generate fernet_key with:
   #    python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)"
   # fernet_key: ABCDABCDABCDABCDABCDABCDABCDABCDABCDABCD
-  fernet_key: ""
+  fernet_key: "qiGqTI4DnJOw00PXwW6hdR-HKLaGfIzL-xb3zsMod3E="
   service:
     type: ClusterIP
   # mount path for persistant volume
@@ -14,9 +14,9 @@ airflow:
   # set the max number of retries during container initialization
   init_retry_loop:
   # base image for webserver/scheduler/workers
-  image: puckel/docker-airflow
-  imageTag: 1.9.0
-  # image_pull_policy: Always or IfNotPresent
+  image: chandanpal06/kube-airflow
+  imageTag: kube-v1.0
+  image_pull_policy: Always or IfNotPresent
   image_pull_policy: IfNotPresent
   # Set scheduler_num_runs to control how the schduler behaves:
   #   -1 will let him looping indefinitively but it will never update the DAG
@@ -27,14 +27,13 @@ airflow:
   # url_prefix is "/airflow"
   url_prefix: "/airflow"
   config: {}
-
 celery:
   # Number of celery workers to initialize
   num_workers: 1
 
 ingress:
   # enable ingress
-  enabled: false
+  enabled: true
   annotations:
     # Define the annotation here to configure rewriting rules related to your Load balancer
     #
@@ -71,7 +70,7 @@ ingress:
       # traefik.frontend.rule.type: PathPrefixStrip
       # kubernetes.io/ingress.class: traefik
   # hostname for both endpoint
-  host: ""
+  host: "example.com"
   path:
     # if web is '/airflow':
     #  - UI will be accessible to '/airflow/admin'
@@ -83,7 +82,7 @@ ingress:
     flower: /airflow/flower
 
 persistence:
-  enabled: false
+  enabled: true
   ## storageClass: Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning

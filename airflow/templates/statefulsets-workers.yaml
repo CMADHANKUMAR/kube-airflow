@@ -24,6 +24,7 @@ spec:
         app: {{ template "airflow.name" . }}-worker
         release: {{ .Release.Name }}
     spec:
+      serviceAccountName: spark
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       containers:

@@ -53,15 +53,18 @@ RUN         set -ex \
                 apt-utils \
                 curl \
                 git \
+                default-jdk \
                 locales \
                 netcat \
         &&      sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
         &&  locale-gen \
         &&  update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
         &&  useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
-        &&  pip3 install --upgrade pip 'setuptools!=36.0.0' \
+        &&  pip3 install --upgrade 'setuptools!=36.0.0' \
         &&  if [ ! -e /usr/bin/pip ]; then ln -s /usr/bin/pip3 /usr/bin/pip ; fi \
         &&  if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi \
+        &&  export SLUGIFY_USES_TEXT_UNIDECODE=yes \
+        &&  pip3 install wheel \
         &&  pip3 install -r /requirements/airflow.txt \
         &&  pip3 install -r /requirements/dags.txt \
         &&  apt-get remove --purge -yqq $buildDeps libpq-dev \
@@ -80,6 +83,15 @@ RUN         curl -L -o /usr/local/bin/kubectl \
                 https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
         &&  chmod +x /usr/local/bin/kubectl
 
+
+RUN         curl -L -o ${AIRFLOW_HOME}/spark-2.3.1-bin-hadoop2.7.tgz \
+                 https://archive.apache.org/dist/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz \
+        && tar -xvf ${AIRFLOW_HOME}/spark-2.3.1-bin-hadoop2.7.tgz -C ${AIRFLOW_HOME}/ \
+        && ln -s ${AIRFLOW_HOME}/spark-2.3.1-bin-hadoop2.7 ${AIRFLOW_HOME}/spark
+
+ENV     SPARK_HOME=${AIRFLOW_HOME}/spark
+ENV     PATH=$SPARK_HOME/bin:$PATH
+        
 COPY        script/entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh
 COPY        config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 COPY        script/git-sync ${AIRFLOW_HOME}/git-sync

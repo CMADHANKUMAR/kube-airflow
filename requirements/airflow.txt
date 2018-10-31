@@ -7,7 +7,7 @@ requests
 pyOpenSSL
 ndg-httpsclient
 pyasn1
-psycopg2
+psycopg2>=2.7,<2.8 --no-binary psycopg2
 celery>=4.0.0
 flower>=0.7.3
 # airflow[celery,postgresql,hive]

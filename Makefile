@@ -2,7 +2,7 @@ AIRFLOW_VERSION ?= 1.8.0.0
 KUBECTL_VERSION ?= 1.6.1
 KUBE_AIRFLOW_VERSION ?= 0.10
 
-REPOSITORY ?= mumoshu/kube-airflow
+REPOSITORY ?= rcmadhankumar/kube-airflow
 TAG ?= $(AIRFLOW_VERSION)-$(KUBECTL_VERSION)-$(KUBE_AIRFLOW_VERSION)
 IMAGE ?= $(REPOSITORY):$(TAG)
 ALIAS ?= $(REPOSITORY):$(AIRFLOW_VERSION)-$(KUBECTL_VERSION)
@@ -119,13 +119,13 @@ create:
 	if ! kubectl get namespace $(NAMESPACE) >/dev/null 2>&1; then \
 	  kubectl create namespace $(NAMESPACE); \
 	fi
-	kubectl create -f airflow.all.yaml --namespace $(NAMESPACE)
+	kubectl create -f airflow.git.yaml --namespace $(NAMESPACE)
 
 apply:
-	kubectl apply -f airflow.all.yaml --namespace $(NAMESPACE)
+	kubectl apply -f airflow.git.yaml --namespace $(NAMESPACE)
 
 delete:
-	kubectl delete -f airflow.all.yaml --namespace $(NAMESPACE)
+	kubectl delete -f airflow.git.yaml --namespace $(NAMESPACE)
 
 list-pods:
 	kubectl get po -a --namespace $(NAMESPACE)
