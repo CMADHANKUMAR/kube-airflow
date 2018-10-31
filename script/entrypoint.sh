@@ -53,7 +53,7 @@ fi
 # wait for redis
 if [ "$1" = "webserver" ] || [ "$1" = "worker" ] || [ "$1" = "scheduler" ] || [ "$1" = "flower" ] ; then
   j=0
-  while ! curl http://$REDIS_HOST:$REDIS_PORT/SET/hello/world |grep '200 OK'; do
+  while ! curl -sI http://$REDIS_HOST:$REDIS_PORT/SET/hello/world |grep '200 OK'; do
     j=`expr $j + 1`
     if [ $j -ge $TRY_LOOP ]; then
       echo "$(date) - $REDIS_HOST still not reachable, giving up"
