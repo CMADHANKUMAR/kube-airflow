@@ -72,7 +72,7 @@ if [ "$1" = "webserver" ] || [ "$1" = "worker" ] || [ "$1" = "scheduler" ] ; the
   i=0
   while ! nc $POSTGRES_HOST $POSTGRES_PORT >/dev/null 2>&1 < /dev/null; do
     i=`expr $i + 1`
-   =p]- if [ $i -ge $TRY_LOOP ]; then
+    if [ $i -ge $TRY_LOOP ]; then
       echo "$(date) - ${POSTGRES_HOST}:${POSTGRES_PORT} still not reachable, giving up"
       exit 1
     fi
